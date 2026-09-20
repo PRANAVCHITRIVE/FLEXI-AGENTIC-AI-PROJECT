@@ -2,7 +2,7 @@ import { AnalysisResult } from './types';
 import { DEMO_APPLICANTS } from './demo-applicants';
 import { analyzeApplicant } from './scoring';
 
-const STORAGE_KEY = 'loanai_analyses_v1';
+const STORAGE_KEY = 'loanai_analyses_v2';
 
 function seedDemoAnalyses(): AnalysisResult[] {
   const now = Date.now();
@@ -23,7 +23,15 @@ export function loadAnalyses(): AnalysisResult[] {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(seeded));
       return seeded;
     }
-    return JSON.parse(raw) as AnalysisResult[];
+
+    const parsed = JSON.parse(raw) as unknown;
+    if (!Array.isArray(parsed) || parsed.length === 0) {
+      const seeded = seedDemoAnalyses();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(seeded));
+      return seeded;
+    }
+
+    return parsed as AnalysisResult[];
   } catch {
     return [];
   }
