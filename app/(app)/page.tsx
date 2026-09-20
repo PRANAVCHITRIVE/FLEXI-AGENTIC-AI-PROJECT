@@ -67,6 +67,16 @@ export default function DashboardPage() {
   const medRisk = analyses.filter((a) => a.riskTier === 'Medium Risk').length;
   const highRisk = analyses.filter((a) => a.riskTier === 'High Risk').length;
 
+  const averageEligibility = analyses.length
+    ? Math.round(analyses.reduce((sum, a) => sum + a.eligibilityScore, 0) / analyses.length)
+    : 0;
+  const averageRisk = analyses.length
+    ? Math.round(analyses.reduce((sum, a) => sum + a.riskScore, 0) / analyses.length)
+    : 0;
+  const eligibleShare = analyses.length
+    ? Math.round((eligible / analyses.length) * 100)
+    : 0;
+
   const eligibilityData = [
     { name: 'Eligible', value: eligible, color: '#16a34a' },
     { name: 'Conditionally Eligible', value: conditional, color: '#d97706' },
@@ -114,27 +124,27 @@ export default function DashboardPage() {
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <KpiCard
           icon={Users}
-          metric="128"
+          metric={analyses.length.toString()}
           label="Applications Analyzed"
           indicator={<Progress value={72} className="h-1.5" />}
         />
         <KpiCard
           icon={Percent}
-          metric="76%"
+          metric={`${averageEligibility}%`}
           label="Average Eligibility"
           iconClass="bg-green-500/10"
           indicator={
             <div className="flex items-center gap-1 text-xs text-green-600">
-              <TrendingUp className="h-3 w-3" /> Above target
+              <TrendingUp className="h-3 w-3" /> {eligibleShare}% eligible
             </div>
           }
         />
         <KpiCard
           icon={Activity}
-          metric="31 / 100"
+          metric={`${averageRisk} / 100`}
           label="Average Risk Score"
           iconClass="bg-amber-500/10"
-          indicator={<Progress value={31} className="h-1.5" />}
+          indicator={<Progress value={averageRisk} className="h-1.5" />}
         />
         <KpiCard
           icon={Timer}
