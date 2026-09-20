@@ -18,7 +18,6 @@ import {
 import { cn } from '@/lib/utils';
 import { Logo } from '@/components/logo';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import {
   Sheet,
   SheetContent,
@@ -147,14 +146,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
 
           <div className="hidden items-center md:flex">
-            <div className="relative">
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                placeholder="Search analyses..."
-                className="h-9 w-56 pl-9"
-                onChange={() => {}}
-              />
-            </div>
+            <Link
+              href="/history"
+              className="relative flex h-9 w-56 items-center rounded-md border border-input bg-background pl-9 pr-3 text-sm text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
+              aria-label="Open analysis history and search"
+            >
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2" />
+              <span>Search analyses...</span>
+            </Link>
           </div>
 
           <div className="flex items-center gap-2">
